@@ -1,0 +1,133 @@
+import React, { useContext } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { LineChart } from 'react-native-chart-kit';
+import { Dimensions } from 'react-native';
+import { UserContext } from '../App';
+
+const ResultScreen = ({ route, navigation }) => {
+  const { result, patientInfo } = route.params;
+  const { userSession } = useContext(UserContext);
+  
+  const screenWidth = Dimensions.get('window').width;
+  
+  // Get CKD stage information based on user type
+  const getStageInfo = () => {
+    const isClinic = userSession.userType === 'clinician';
+    
+    switch(result.stage) {
+      case 1:
+        return isClinic 
+          ? 'Normal kidney function but with other findings. Consider regular monitoring.'
+          : 'Your kidneys are functioning normally, but there might be other findings that suggest kidney disease.';
+      case 2:
+        return isClinic
+          ? 'Mildly reduced kidney function. Monitor and assess cardiovascular risk factors.'
+          : 'Your kidneys have mildly reduced function. Follow-up with your doctor for monitoring.';
+      case '3A':
+        return isClinic
+          ? 'Moderately reduced kidney function. Monitor at least every 6 months. Assess and manage CVD risk.'
+          : 'Your kidneys have moderately reduced function. Regular check-ups are important.';
+      case '3B':
+        return isClinic
+          ? 'Moderately reduced kidney function. Monitor quarterly. Consider nephrology referral.'
+          : 'Your kidneys have moderately reduced function. More frequent monitoring is recommended.';
+      case 4:
+        return isClinic
+          ? 'Severely reduced kidney function. Likely requires nephrology referral.'
+          : 'Your kidneys have severely reduced function. You should be under specialist care.';
+      case 5:
+        return isClinic
+          ? 'Very severe reduction or kidney failure. Patient needs nephrologist care.'
+          : 'Your kidneys have very severe reduced function or failure. Specialist care is essential.';
+      default:
+        return 'No specific recommendations for this result.';
+    }
+  };
+  
+  // Prepare history data for chart if available
+  const historyData = {
+    labels: userSession.calculationHistory.length > 0 
+      ? userSession.calculationHistory.slice(-7).map((item, index) => `${index+1}`)
+      : ['1'],
+    datasets: [{
+      data: userSession.calculationHistory.length > 0
+        ? userSession.calculationHistory.slice(-7).map(item => item.eGFR)
+        : [result.eGFR],
+      color: (opacity = 1) => `rgba(0, 114, 206, ${opacity})`,
+      strokeWidth: 2
+    }]
+  };
+  
+  const chartConfig = {
+    backgroundGradientFrom: '#ffffff',
+    backgroundGradientTo: '#ffffff',
+    decimalPlaces: 0,
+    color: (opacity = 1) => `rgba(0, 114, 206, ${opacity})`,
+    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+    style: {
+      borderRadius: 16
+    },
+    propsForDots: {
+      r: '6',
+      strokeWidth: '2',
+      stroke: '#0072CE'
+    }
+  };
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.resultCard}>
+        <Text style={styles.resultTitle}>eGFR Result</Text>
+        <Text style={styles.resultValue}>{result.eGFR.toFixed(1)} ml/min/1.73m²</Text>
+        
+        <View style={styles.stageContainer}>
+          <Text style={styles.stageLabel}>CKD Stage:</Text>
+          <Text style={[styles.stageValue, 
+            result.stage <= 2 ? styles.stageGood : 
+            result.stage === '3A' || result.stage === '3B' ? styles.stageWarning : 
+            styles.stageCritical]}>
+            {result.stage}
+          </Text>
+        </View>
+        
+        <Text style={styles.infoTitle}>What does this mean?</Text>
+        <Text style={styles.infoText}>{getStageInfo()}</Text>
+      </View>
+      
+      {userSession.calculationHistory.length > 0 && (
+        <View style={styles.chartCard}>
+          <Text style={styles.chartTitle}>eGFR History</Text>
+          <LineChart
+            data={historyData}
+            width={screenWidth - 40}
+            height={220}
+            chartConfig={chartConfig}
+            bezier
+            style={styles.chart}
+            verticalLabelRotation={0}
+            withHorizontalLabels={true}
+            withVerticalLabels={true}
+            yAxisLabel=""
+            yAxisSuffix=""
+          />
+        </View>
+      )}
+      
+      <TouchableOpacity 
+        style={styles.button} 
+        onPress={() => navigation.navigate(userSession.userType === 'clinician' ? 'ClinicianCalculator' : 'PatientCalculator')}
+      >
+        <Text style={styles.buttonText}>New Calculation</Text>
+      </TouchableOpacity>
+      
+      {userSession.isLoggedIn && (
+        <TouchableOpacity 
+          style={[styles.button, styles.secondaryButton]} 
+          onPress={() => navigation.navigate('History')}
+        >
+          <Text style={styles.buttonText}>View Full History</Text>
+        </TouchableOpacity>
+      )}
+    </ScrollView>
+  );
+};
