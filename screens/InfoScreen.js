@@ -93,5 +93,47 @@ const InfoScreen = () => {
     </ScrollView>
   );
 };
+// Make sure you define your styles object
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    justifyContent: 'flex-start',
+    padding: 16,
+    backgroundColor: '#f8f8f8',
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#0072CE', // NHS Blue
+    textAlign: 'center',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 16,
+    marginBottom: 8,
+    color: '#0072CE', // NHS Blue
+  },
+  paragraph: {
+    fontSize: 16,
+    lineHeight: 24,
+    marginBottom: 16,
+    color: '#333',
+  },
+  disclaimer: {
+    fontSize: 14,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    marginTop: 20,
+    marginBottom: 16,
+    color: '#666',
+  },
+  image: {
+    width: '100%',
+    height: undefined,
+    aspectRatio: 1.5, // Adjust this based on your image's aspect ratio
+  }
+});
 
 export default InfoScreen;

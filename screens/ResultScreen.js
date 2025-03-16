@@ -131,5 +131,107 @@ const ResultScreen = ({ route, navigation }) => {
     </ScrollView>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#fff',
+  },
+  resultCard: {
+    marginBottom: 20,
+    padding: 20,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  resultTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  resultValue: {
+    fontSize: 20,
+    color: '#0072CE',
+    marginBottom: 10,
+  },
+  stageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  stageLabel: {
+    fontSize: 18,
+    color: '#333',
+    marginRight: 10,
+  },
+  stageValue: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  stageGood: {
+    color: 'green',
+  },
+  stageWarning: {
+    color: 'orange',
+  },
+  stageCritical: {
+    color: 'red',
+  },
+  infoTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 5,
+    color: '#333',
+  },
+  infoText: {
+    fontSize: 16,
+    color: '#666',
+  },
+  chartCard: {
+    marginBottom: 20,
+    padding: 20,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  chartTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 10,
+  },
+  chart: {
+    marginTop: 10,
+  },
+  button: {
+    backgroundColor: '#0072CE',
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  secondaryButton: {
+    backgroundColor: '#005EB8',
+  },
+});
 
 export default ResultScreen;

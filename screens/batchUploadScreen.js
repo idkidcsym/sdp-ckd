@@ -183,4 +183,92 @@ const BatchUploadScreen = ({ navigation }) => {
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  description: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 20,
+  },
+  button: {
+    backgroundColor: '#0072CE',
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  orText: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginVertical: 20,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  textArea: {
+    borderColor: '#CCC',
+    borderWidth: 1,
+    padding: 10,
+    height: 100,
+    fontSize: 14,
+    marginBottom: 10,
+  },
+  secondaryButton: {
+    backgroundColor: '#005EB8',
+    marginBottom: 20,
+  },
+  resultsContainer: {
+    marginTop: 20,
+  },
+  resultsTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  tableHeader: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCC',
+    paddingBottom: 5,
+  },
+  tableRow: {
+    flexDirection: 'row',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEE',
+  },
+  tableCell: {
+    flex: 1,
+    textAlign: 'center',
+  },
+  idCell: {
+    flex: 2, // give more space to ID
+  },
+  stageGood: {
+    color: 'green',
+  },
+  stageWarning: {
+    color: 'orange',
+  },
+  stageCritical: {
+    color: 'red',
+  },
+});
+
 export default BatchUploadScreen;

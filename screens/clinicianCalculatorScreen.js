@@ -206,4 +206,78 @@ const ClinicianCalculatorScreen = ({ navigation }) => {
   );
 }; 
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+    paddingTop: 20,
+    paddingBottom: 10,
+  },
+  formGroup: {
+    marginBottom: 15,
+  },
+  label: {
+    fontSize: 16,
+    color: '#000',
+    marginBottom: 5,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+  inputError: {
+    borderColor: 'red',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+  },
+  picker: {
+    width: '100%',
+    backgroundColor: '#fff',
+  },
+  pickerContainer: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 4,
+  },
+  button: {
+    backgroundColor: '#007bff',
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    textAlign: 'center',
+    color: '#fff',
+    fontSize: 16,
+  },
+  secondaryButton: {
+    backgroundColor: '#6c757d',
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  inputRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  inputFlex: {
+    flex: 1,
+  },
+  unitPicker: {
+    flex: 0.3,
+    marginLeft: 10,
+  }
+});
+
 export default ClinicianCalculatorScreen;
