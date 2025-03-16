@@ -5,7 +5,7 @@ import {
   ScrollView, Switch, KeyboardAvoidingView, Platform 
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { UserContext } from '../app.js';
+import { UserContext } from '../userContext';
 import { calculateEGFR } from '../utils/ckdCalculator';
 
 const ClinicianCalculatorScreen = ({ navigation }) => {
@@ -204,4 +204,6 @@ const ClinicianCalculatorScreen = ({ navigation }) => {
       </ScrollView>
     </KeyboardAvoidingView>
   );
-};
+}; 
+
+export default ClinicianCalculatorScreen;

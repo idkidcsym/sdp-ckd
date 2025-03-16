@@ -1,7 +1,7 @@
 // screens/HistoryScreen.js
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import { UserContext } from '../app.js';
+import { UserContext } from '../userContext';
 
 const HistoryScreen = ({ navigation }) => {
   const { userSession } = useContext(UserContext);
@@ -70,3 +70,5 @@ const HistoryScreen = ({ navigation }) => {
     </View>
   );
 };
+
+export default HistoryScreen;

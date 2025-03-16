@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { UserContext } from '../app.js';
+import { UserContext } from '../userContext';
 import { calculateEGFR } from '../utils/ckdCalculator';
 
 const PatientCalculatorScreen = ({ navigation }) => {
@@ -228,3 +228,5 @@ const PatientCalculatorScreen = ({ navigation }) => {
     </KeyboardAvoidingView>
   );
 };
+
+export default PatientCalculatorScreen;

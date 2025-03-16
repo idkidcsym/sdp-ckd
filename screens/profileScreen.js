@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { UserContext } from '../app.js';
+import { UserContext } from '../userContext';
 
 const ProfileScreen = ({ navigation }) => {
   const { userSession, setUserSession } = useContext(UserContext);
@@ -454,3 +454,5 @@ const styles = StyleSheet.create({
     color: '#666'
   }
 });
+
+export default ProfileScreen;

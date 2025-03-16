@@ -93,3 +93,5 @@ const InfoScreen = () => {
     </ScrollView>
   );
 };
+
+export default InfoScreen;

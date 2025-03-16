@@ -1,8 +1,9 @@
-//App.js - Main entry point for the CKD Calculator App
-import React, { useState } from 'react';
+// app.js - Keep the lowercase if that's your convention
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { UserProvider } from './userContext'; // Import the provider
 
 // Import screens
 import HomeScreen from './screens/HomeScreen';
@@ -15,25 +16,14 @@ import HistoryScreen from './screens/HistoryScreen';
 import InfoScreen from './screens/InfoScreen';
 import ProfileScreen from './screens/ProfileScreen';
 
-// Create context for user session
-export const UserContext = React.createContext();
-
 const Stack = createStackNavigator();
 
 export default function App() {
-  const [userSession, setUserSession] = useState({
-    isLoggedIn: false,
-    userType: null, // 'patient' or 'clinician'
-    userId: null,   // NHS number or HCP ID
-    userProfile: null,
-    calculationHistory: []
-  });
-
   return (
     <SafeAreaProvider>
-      <UserContext.Provider value={{ userSession, setUserSession }}>
+      <UserProvider>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home" 
+          <Stack.Navigator initialRouteName="Home"
             screenOptions={{
               headerStyle: {
                 backgroundColor: '#0072CE', // NHS Blue
@@ -54,7 +44,7 @@ export default function App() {
             <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'User Profile' }} />
           </Stack.Navigator>
         </NavigationContainer>
-      </UserContext.Provider>
+      </UserProvider>
     </SafeAreaProvider>
   );
 }
