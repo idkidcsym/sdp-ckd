@@ -160,7 +160,7 @@ const PatientCalculatorScreen = ({ navigation }) => {
           </View>
         </View>
         
-        <View style={styles.formGroup}>
+        <View style={styles.ethnicityContainer}>
           <Text style={styles.label}>Black ethnicity:</Text>
           <Switch
             value={formData.isBlack}
@@ -211,7 +211,7 @@ const PatientCalculatorScreen = ({ navigation }) => {
           {errors.nhsNumber && <Text style={styles.errorText}>{errors.nhsNumber}</Text>}
         </View>
         
-        <View style={[styles.formGroup, styles.switchContainer]}>
+        <View style={[styles.formGroup, styles.rememberMeContainer]}>
           <Text style={styles.label}>Remember me:</Text>
           <Switch
             value={formData.rememberMe}
@@ -231,18 +231,92 @@ const PatientCalculatorScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 20,
     backgroundColor: '#fff',
   },
+  formGroup: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    color: '#000',
+    marginBottom: 8,
+  },
   input: {
-    height: 40,
+    height: 48,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 5,
-    marginBottom: 15,
-    paddingHorizontal: 10,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    fontSize: 16,
+    backgroundColor: 'white',
   },
-  // Add more styles as needed
+  inputError: {
+    borderColor: 'red',
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    marginBottom: 15,
+    overflow: 'hidden',
+  },
+  picker: {
+    height: 54,
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  button: {
+    backgroundColor: '#0072CE',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    marginTop: 5,
+  },
+  disclaimer: {
+    fontSize: 14,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    marginTop: 20,
+    marginBottom: 16,
+    color: '#666',
+  },
+  ethnicityContainer: {
+    borderWidth: 1,
+    borderColor: '#ccc',  // Maintain your chosen theme color
+    borderRadius: 8,
+    padding: 5,  // Keep padding to maintain internal space
+    marginBottom: 20,  // Space below the box
+    flexDirection: 'row', // Set children to line up in a row
+    alignItems: 'center', // Center items vertically
+    justifyContent: 'space-between', // Distribute space between children
+  },
+  rememberMeContainer: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 5,
+    marginBottom: 20,
+    flexDirection: 'row', // Arrange label and switch in a row
+    alignItems: 'center', // Align items vertically in the center
+    justifyContent: 'space-between', // Add space between the label and the switch
+  },
 });
+
 export default PatientCalculatorScreen;
