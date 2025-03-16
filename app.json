@@ -1,4 +1,7 @@
 {
+   
+
+  
     "expo": {
       "name": "CKD Calculator",
       "slug": "sdp-ckd",
@@ -14,7 +17,7 @@
         "fallbackToCacheTimeout": 0
       },
       "assetBundlePatterns": [
-        "**/*"
+        "assets/*"
       ],
       "ios": {
         "supportsTablet": true

@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
-import { UserContext } from '../App';
+import { UserContext } from '../app.js';
 import { calculateEGFR } from '../utils/ckdCalculator';
 
 const BatchUploadScreen = ({ navigation }) => {

@@ -1,4 +1,4 @@
-* Calculates estimated Glomerular Filtration Rate (eGFR) using the MDRD equation
+/* Calculates estimated Glomerular Filtration Rate (eGFR) using the MDRD equation
  * 
  * @param {number} creatinine - Creatinine value in micromol/l
  * @param {number} age - Age in years (must be between 18-110)

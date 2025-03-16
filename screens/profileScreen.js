@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { UserContext } from '../App';
+import { UserContext } from '../app.js';
 
 const ProfileScreen = ({ navigation }) => {
   const { userSession, setUserSession } = useContext(UserContext);

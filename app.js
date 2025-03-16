@@ -1,5 +1,4 @@
 //App.js - Main entry point for the CKD Calculator App
-
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';

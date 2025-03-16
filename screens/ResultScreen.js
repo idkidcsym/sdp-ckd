@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
-import { UserContext } from '../App';
+import { UserContext } from '../app.js';
 
 const ResultScreen = ({ route, navigation }) => {
   const { result, patientInfo } = route.params;

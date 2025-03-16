@@ -1,7 +1,7 @@
 // screens/UserTypeScreen.js
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { UserContext } from '../App';
+import { UserContext } from '../app.js';
 
 const UserTypeScreen = ({ navigation }) => {
   const { userSession, setUserSession } = useContext(UserContext);
