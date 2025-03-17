@@ -25,7 +25,10 @@ const HomeScreen = ({ navigation }) => {
       userProfile: null,
       calculationHistory: []
     });
-    // Stay on the home screen instead of navigating to login
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Login' }], // This clears the navigation stack completely
+    });
   };
 
   // If user is not logged in, show the welcome screen
