@@ -1,4 +1,3 @@
-// app.js - Keep the lowercase if that's your convention
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -6,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { UserProvider } from './userContext'; // Import the provider
 
 // Import screens
+import LoginScreen from './screens/LoginScreen'; // Add import for the login screen
 import HomeScreen from './screens/HomeScreen';
 import UserTypeScreen from './screens/UserTypeScreen';
 import PatientCalculatorScreen from './screens/PatientCalculatorScreen';
@@ -15,6 +15,7 @@ import BatchUploadScreen from './screens/BatchUploadScreen';
 import HistoryScreen from './screens/HistoryScreen';
 import InfoScreen from './screens/InfoScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import RegisterScreen from './screens/RegisterScreen'; // Add import for the register screen
 
 const Stack = createStackNavigator();
 
@@ -23,7 +24,8 @@ export default function App() {
     <SafeAreaProvider>
       <UserProvider>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home"
+          <Stack.Navigator
+            initialRouteName="Login" // Change initial route to Login
             screenOptions={{
               headerStyle: {
                 backgroundColor: '#0072CE', // NHS Blue
@@ -33,6 +35,21 @@ export default function App() {
                 fontWeight: 'bold',
               },
             }}>
+            <Stack.Screen 
+              name="Login" 
+              component={LoginScreen} 
+              options={{ 
+                headerShown: false // Hide header for login screen
+              }} 
+            />
+            <Stack.Screen 
+              name="Register" 
+              component={RegisterScreen} 
+              options={{ 
+                title: 'Create Account',
+                headerShown: true
+              }} 
+            />
             <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'CKD Calculator' }} />
             <Stack.Screen name="UserType" component={UserTypeScreen} options={{ title: 'Select User Type' }} />
             <Stack.Screen name="PatientCalculator" component={PatientCalculatorScreen} options={{ title: 'eGFR Calculator' }} />
