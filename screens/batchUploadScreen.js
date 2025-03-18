@@ -17,92 +17,132 @@ const BatchUploadScreen = ({ navigation }) => {
   const pickCSVFile = async () => {
     try {
       setUploading(true);
+      // Use more generic document type
       const result = await DocumentPicker.getDocumentAsync({
-        type: 'text/csv',
+        type: "*/*",  // Accept any file type
         copyToCacheDirectory: true
       });
       
-      if (result.type === 'success') {
+      console.log("Document picker result:", result); // Add this debug line
+      
+      if (result.canceled === false && result.assets && result.assets.length > 0) {
+        // Expo SDK 46+ returns different structure
+        const uri = result.assets[0].uri;
+        console.log("Reading file from URI:", uri);
+        
+        try {
+          const content = await FileSystem.readAsStringAsync(uri);
+          console.log("File content (first 100 chars):", content.substring(0, 100));
+          setFileContent(content);
+          processCSVData(content);
+        } catch (readError) {
+          console.error("Error reading file:", readError);
+          Alert.alert('Error', 'Failed to read the CSV file content.');
+        }
+      } else if (result.type === 'success') {
+        // Older Expo SDK format
+        console.log("Reading file from URI (old format):", result.uri);
         const content = await FileSystem.readAsStringAsync(result.uri);
         setFileContent(content);
         processCSVData(content);
+      } else {
+        console.log("Document picking cancelled or failed");
       }
     } catch (error) {
+      console.error("Document picker error:", error);
       Alert.alert('Error', 'Failed to load the CSV file.');
-      console.error(error);
     } finally {
       setUploading(false);
     }
   };
 
   const processCSVData = (csvContent) => {
-    const lines = csvContent.split('\n');
-    const parsedResults = [];
-    
-    // Skip header row if it exists
-    const startIdx = lines[0].includes('patientID') ? 1 : 0;
-    
-    for (let i = startIdx; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (!line) continue;
+    try {
+      console.log("Processing CSV data, length:", csvContent.length);
+      const lines = csvContent.split('\n');
+      console.log("Found lines:", lines.length);
       
-      const [patientID, gender, yearOfBirth, ethnicity, creatinine] = line.split(',');
-      
-      // Skip invalid rows
-      if (!patientID || !gender || !yearOfBirth || !ethnicity || !creatinine) {
-        continue;
+      // Output first line to see format
+      if (lines.length > 0) {
+        console.log("First line:", lines[0]);
       }
       
-      // Calculate age
-      const currentYear = new Date().getFullYear();
-      const age = currentYear - parseInt(yearOfBirth);
+      // Initialize results array
+      const parsedResults = [];
       
-      // Skip if age is outside valid range
-      if (age < 18 || age > 110) {
-        continue;
+      // Start from index 1 to skip header row
+      const startIdx = 1;
+      
+      for (let i = startIdx; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+        
+        // Based on the log, your CSV format appears to be:
+        // PatientID,Gender,Ethnicity,Age,Creatinine
+        const [patientID, gender, ethnicity, ageStr, creatinine] = line.split(',');
+        
+        // Skip invalid rows
+        if (!patientID || gender === undefined || !ethnicity || !ageStr || !creatinine) {
+          continue;
+        }
+        
+        // Parse age directly from CSV
+        const age = parseInt(ageStr);
+        
+        // Skip if age is outside valid range
+        if (isNaN(age) || age < 18 || age > 110) {
+          continue;
+        }
+        
+        // Your sample data shows Gender as 0/1 where 0 appears to be female and 1 is male
+        const isFemale = gender === '0';
+        
+        // Your sample data shows Ethnicity as 'B'/'O' where B appears to be Black
+        const isBlack = ethnicity === 'B';
+        
+        const creatValue = parseFloat(creatinine);
+        
+        // Skip invalid creatinine values
+        if (isNaN(creatValue) || creatValue <= 0) {
+          continue;
+        }
+        
+        const result = calculateEGFR(creatValue, age, isFemale, isBlack);
+        
+        parsedResults.push({
+          patientID,
+          age,
+          gender: isFemale ? 'female' : 'male',
+          ethnicity,
+          creatinine: creatValue,
+          eGFR: result.eGFR,
+          stage: result.stage
+        });
       }
       
-      const isFemale = gender.toLowerCase() === 'female' || gender.toLowerCase() === 'f';
-      const isBlack = ethnicity.toLowerCase().includes('black');
-      const creatValue = parseFloat(creatinine);
+      setResults(parsedResults);
       
-      // Skip invalid creatinine values
-      if (isNaN(creatValue) || creatValue <= 0) {
-        continue;
+      // Update session with batch results
+      if (parsedResults.length > 0) {
+        const newHistory = parsedResults.map(item => ({
+          date: new Date().toISOString(),
+          patientId: item.patientID,
+          creatinine: item.creatinine,
+          eGFR: item.eGFR,
+          stage: item.stage
+        }));
+        
+        setUserSession({
+          ...userSession,
+          calculationHistory: [
+            ...userSession.calculationHistory,
+            ...newHistory
+          ]
+        });
       }
-      
-      const result = calculateEGFR(creatValue, age, isFemale, isBlack);
-      // screens/BatchUploadScreen.js (continued)
-      parsedResults.push({
-        patientID,
-        age,
-        gender: isFemale ? 'female' : 'male',
-        ethnicity,
-        creatinine: creatValue,
-        eGFR: result.eGFR,
-        stage: result.stage
-      });
-    }
-    
-    setResults(parsedResults);
-    
-    // Update session with batch results
-    if (parsedResults.length > 0) {
-      const newHistory = parsedResults.map(item => ({
-        date: new Date().toISOString(),
-        patientId: item.patientID,
-        creatinine: item.creatinine,
-        eGFR: item.eGFR,
-        stage: item.stage
-      }));
-      
-      setUserSession({
-        ...userSession,
-        calculationHistory: [
-          ...userSession.calculationHistory,
-          ...newHistory
-        ]
-      });
+    } catch (error) {
+      console.error("Error processing file:", error);
+      Alert.alert('Error', 'Failed to process the CSV data. Please check the format.');
     }
   };
 
@@ -123,7 +163,7 @@ const BatchUploadScreen = ({ navigation }) => {
       <Text style={styles.title}>Batch eGFR Calculation</Text>
       <Text style={styles.description}>
         Upload a CSV file with patient data in the following format:
-        patientID, gender, yearOfBirth, ethnicity, creatinine
+        PatientID,Gender,Ethnicity,Age,Creatinine
       </Text>
       
       <TouchableOpacity 
@@ -145,7 +185,7 @@ const BatchUploadScreen = ({ navigation }) => {
         numberOfLines={5}
         value={fileContent}
         onChangeText={handleManualCSVInput}
-        placeholder="patientID,gender,yearOfBirth,ethnicity,creatinine"
+        placeholder="PatientID,Gender,Ethnicity,Age,Creatinine"
       />
       
       <TouchableOpacity 
