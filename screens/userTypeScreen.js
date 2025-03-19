@@ -1,4 +1,3 @@
-// screens/UserTypeScreen.js
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { UserContext } from '../userContext';

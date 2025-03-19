@@ -1,4 +1,3 @@
-// screens/ClinicianCalculatorScreen.js
 import React, { useState, useContext } from 'react';
 import { 
   View, Text, StyleSheet, TextInput, TouchableOpacity, 
@@ -18,7 +17,6 @@ const ClinicianCalculatorScreen = ({ navigation }) => {
     isBlack: false,
     creatinine: '',
     creatinineUnit: 'micromol/l',
-    // screens/ClinicianCalculatorScreen.js (continued)
     hcpId: ''
   });
   
@@ -50,13 +48,11 @@ const ClinicianCalculatorScreen = ({ navigation }) => {
   const handleCalculate = () => {
     if (!validateForm()) return;
     
-    // Convert creatinine to micromol/l if needed
     let creatValue = parseFloat(formData.creatinine);
     if (formData.creatinineUnit === 'mg/dL') {
-      creatValue = creatValue * 88.4; // Convert to micromol/l
+      creatValue = creatValue * 88.4;
     }
     
-    // Calculate eGFR
     const result = calculateEGFR(
       creatValue,
       parseInt(formData.age),
@@ -64,7 +60,6 @@ const ClinicianCalculatorScreen = ({ navigation }) => {
       formData.isBlack
     );
     
-    // Update session with clinician info
     setUserSession({
       ...userSession,
       userType: 'clinician',
@@ -81,7 +76,6 @@ const ClinicianCalculatorScreen = ({ navigation }) => {
       ]
     });
     
-    // Navigate to results screen
     navigation.navigate('Result', { 
       result,
       patientInfo: {

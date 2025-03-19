@@ -1,4 +1,3 @@
-// screens/HistoryScreen.js
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { UserContext } from '../userContext';
@@ -75,26 +74,26 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 20,
-    backgroundColor: '#f0f0f0', // Light grey background
+    backgroundColor: '#f0f0f0', 
   },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#333', // Dark text for better readability
-    marginBottom: 20, // Spacing between title and content
+    color: '#333', 
+    marginBottom: 20, 
   },
   emptyText: {
     fontSize: 18,
-    color: '#666', // Medium grey text for empty state
-    textAlign: 'center', // Center text when no history is available
-    marginTop: 50, // Push text down to be more centered
+    color: '#666', 
+    textAlign: 'center', 
+    marginTop: 50, 
   },
   historyItem: {
-    backgroundColor: '#fff', // White background for each item
+    backgroundColor: '#fff', 
     padding: 15,
     borderRadius: 10,
-    marginBottom: 10, // Space between items
-    shadowColor: "#000", // Shadow for 3D effect
+    marginBottom: 10, 
+    shadowColor: "#000", 
     shadowOffset: {
       width: 0,
       height: 2,
@@ -105,47 +104,47 @@ const styles = StyleSheet.create({
   },
   historyHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between', // Space out date and patient ID
-    marginBottom: 10, // Space between header and details
+    justifyContent: 'space-between', 
+    marginBottom: 10, 
   },
   historyDate: {
     fontSize: 16,
-    color: '#0072CE', // Use NHS blue for date to tie into overall theme
+    color: '#0072CE', 
   },
   patientId: {
     fontSize: 16,
-    color: '#0072CE', // Same as date for consistency
+    color: '#0072CE', 
   },
   historyDetails: {
     flexDirection: 'row',
-    justifyContent: 'space-between', // Space out details evenly
+    justifyContent: 'space-between', 
   },
   historyValue: {
-    flexDirection: 'column', // Stack label and data vertically
+    flexDirection: 'column', 
   },
   historyLabel: {
     fontSize: 14,
-    color: '#666', // Medium grey for labels
+    color: '#666', 
   },
   historyData: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#333', // Dark grey for important data
+    color: '#333', 
   },
   stageGood: {
-    color: 'green', // Green for good stages
+    color: 'green', 
   },
   stageWarning: {
-    color: 'orange', // Orange for warning stages
+    color: 'orange', 
   },
   stageCritical: {
-    color: 'red', // Red for critical stages
+    color: 'red', 
   },
   list: {
     flexGrow: 1,
   },
   button: {
-    backgroundColor: '#0072CE', // NHS blue for buttons
+    backgroundColor: '#0072CE', 
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
@@ -157,7 +156,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   secondaryButton: {
-    backgroundColor: '#005EB8', // Darker NHS blue for secondary button
+    backgroundColor: '#005EB8', 
   },
 });
 

@@ -2,10 +2,9 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { UserProvider } from './userContext'; // Import the provider
+import { UserProvider } from './userContext';
 
-// Import screens
-import LoginScreen from './screens/LoginScreen'; // Add import for the login screen
+import LoginScreen from './screens/LoginScreen'; 
 import HomeScreen from './screens/HomeScreen';
 import UserTypeScreen from './screens/UserTypeScreen';
 import PatientCalculatorScreen from './screens/PatientCalculatorScreen';
@@ -15,7 +14,7 @@ import BatchUploadScreen from './screens/BatchUploadScreen';
 import HistoryScreen from './screens/HistoryScreen';
 import InfoScreen from './screens/InfoScreen';
 import ProfileScreen from './screens/ProfileScreen';
-import RegisterScreen from './screens/RegisterScreen'; // Add import for the register screen
+import RegisterScreen from './screens/RegisterScreen'; 
 
 const Stack = createStackNavigator();
 
@@ -25,10 +24,10 @@ export default function App() {
       <UserProvider>
         <NavigationContainer>
           <Stack.Navigator
-            initialRouteName="Login" // Change initial route to Login
+            initialRouteName="Login" 
             screenOptions={{
               headerStyle: {
-                backgroundColor: '#0072CE', // NHS Blue
+                backgroundColor: '#0072CE', 
               },
               headerTintColor: '#fff',
               headerTitleStyle: {
@@ -39,7 +38,7 @@ export default function App() {
               name="Login" 
               component={LoginScreen} 
               options={{ 
-                headerShown: false // Hide header for login screen
+                headerShown: false 
               }} 
             />
             <Stack.Screen 

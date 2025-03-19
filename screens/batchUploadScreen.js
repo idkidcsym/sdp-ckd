@@ -17,16 +17,14 @@ const BatchUploadScreen = ({ navigation }) => {
   const pickCSVFile = async () => {
     try {
       setUploading(true);
-      // Use more generic document type
       const result = await DocumentPicker.getDocumentAsync({
-        type: "*/*",  // Accept any file type
+        type: "*/*", 
         copyToCacheDirectory: true
       });
       
-      console.log("Document picker result:", result); // Add this debug line
+      console.log("Document picker result:", result); 
       
       if (result.canceled === false && result.assets && result.assets.length > 0) {
-        // Expo SDK 46+ returns different structure
         const uri = result.assets[0].uri;
         console.log("Reading file from URI:", uri);
         
@@ -40,7 +38,6 @@ const BatchUploadScreen = ({ navigation }) => {
           Alert.alert('Error', 'Failed to read the CSV file content.');
         }
       } else if (result.type === 'success') {
-        // Older Expo SDK format
         console.log("Reading file from URI (old format):", result.uri);
         const content = await FileSystem.readAsStringAsync(result.uri);
         setFileContent(content);
@@ -62,47 +59,36 @@ const BatchUploadScreen = ({ navigation }) => {
       const lines = csvContent.split('\n');
       console.log("Found lines:", lines.length);
       
-      // Output first line to see format
       if (lines.length > 0) {
         console.log("First line:", lines[0]);
       }
       
-      // Initialize results array
       const parsedResults = [];
       
-      // Start from index 1 to skip header row
       const startIdx = 1;
       
       for (let i = startIdx; i < lines.length; i++) {
         const line = lines[i].trim();
         if (!line) continue;
         
-        // Based on the log, your CSV format appears to be:
-        // PatientID,Gender,Ethnicity,Age,Creatinine
         const [patientID, gender, ethnicity, ageStr, creatinine] = line.split(',');
         
-        // Skip invalid rows
         if (!patientID || gender === undefined || !ethnicity || !ageStr || !creatinine) {
           continue;
         }
         
-        // Parse age directly from CSV
         const age = parseInt(ageStr);
         
-        // Skip if age is outside valid range
         if (isNaN(age) || age < 18 || age > 110) {
           continue;
         }
         
-        // Your sample data shows Gender as 0/1 where 0 appears to be female and 1 is male
         const isFemale = gender === '0';
         
-        // Your sample data shows Ethnicity as 'B'/'O' where B appears to be Black
         const isBlack = ethnicity === 'B';
         
         const creatValue = parseFloat(creatinine);
         
-        // Skip invalid creatinine values
         if (isNaN(creatValue) || creatValue <= 0) {
           continue;
         }
@@ -122,7 +108,6 @@ const BatchUploadScreen = ({ navigation }) => {
       
       setResults(parsedResults);
       
-      // Update session with batch results
       if (parsedResults.length > 0) {
         const newHistory = parsedResults.map(item => ({
           date: new Date().toISOString(),
@@ -298,7 +283,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   idCell: {
-    flex: 2, // give more space to ID
+    flex: 2, 
   },
   stageGood: {
     color: 'green',

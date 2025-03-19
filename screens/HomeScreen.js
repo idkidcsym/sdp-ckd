@@ -31,43 +31,6 @@ const HomeScreen = ({ navigation }) => {
     });
   };
 
-  // If user is not logged in, show the welcome screen
-  if (!userSession.isLoggedIn && userSession.userType !== 'guest') {
-    return (
-      <View style={styles.container}>
-        <StatusBar style="auto" />
-        <Image 
-          source={require('../assets/kidney-icon.png')} 
-          style={styles.logo} 
-          resizeMode="contain"
-        />
-        <Text style={styles.title}>NHS CKD Risk Calculator</Text>
-        <Text style={styles.subtitle}>Calculate your estimated Glomerular Filtration Rate (eGFR)</Text>
-        
-        <TouchableOpacity 
-          style={styles.button} 
-          onPress={() => navigation.navigate('UserType')}
-        >
-          <Text style={styles.buttonText}>Start Calculation</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={[styles.button, styles.secondaryButton]} 
-          onPress={() => navigation.navigate('Info')}
-        >
-          <Text style={styles.buttonText}>Learn About CKD</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={[styles.button, styles.tertiaryButton]} 
-          onPress={() => navigation.navigate('Login')}
-        >
-          <Text style={styles.buttonText}>Sign In / Register</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
   // If user is logged in or is a guest, show the dashboard
   return (
     <SafeAreaView style={styles.dashboardContainer}>
