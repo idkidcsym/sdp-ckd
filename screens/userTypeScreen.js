@@ -10,7 +10,7 @@ const UserTypeScreen = ({ navigation }) => {
       ...userSession,
       userType: type
     });
-    
+
     if (type === 'patient') {
       navigation.navigate('PatientCalculator');
     } else {
@@ -21,17 +21,17 @@ const UserTypeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>I am a:</Text>
-      
-      <TouchableOpacity 
-        style={styles.optionButton} 
+
+      <TouchableOpacity
+        style={styles.optionButton}
         onPress={() => selectUserType('patient')}
       >
         <Text style={styles.optionButtonText}>Patient</Text>
         <Text style={styles.optionDescription}>Calculate my personal eGFR</Text>
       </TouchableOpacity>
-      
-      <TouchableOpacity 
-        style={styles.optionButton} 
+
+      <TouchableOpacity
+        style={styles.optionButton}
         onPress={() => selectUserType('clinician')}
       >
         <Text style={styles.optionButtonText}>Healthcare Professional</Text>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 30,
-    color: '#0072CE', // NHS Blue
+    color: '#0072CE',
     textAlign: 'center',
   },
   optionButton: {

@@ -1,10 +1,11 @@
 import React, { useState, useContext } from 'react';
-import { 
+import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView,
-  TextInput, Alert
+  TextInput, Alert, Share, Platform
 } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 import { UserContext } from '../userContext';
 import { calculateEGFR } from '../utils/ckdCalculator';
 
@@ -13,21 +14,22 @@ const BatchUploadScreen = ({ navigation }) => {
   const [fileContent, setFileContent] = useState('');
   const [results, setResults] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
   const pickCSVFile = async () => {
     try {
       setUploading(true);
       const result = await DocumentPicker.getDocumentAsync({
-        type: "*/*", 
+        type: "*/*",
         copyToCacheDirectory: true
       });
-      
-      console.log("Document picker result:", result); 
-      
+
+      console.log("Document picker result:", result);
+
       if (result.canceled === false && result.assets && result.assets.length > 0) {
         const uri = result.assets[0].uri;
         console.log("Reading file from URI:", uri);
-        
+
         try {
           const content = await FileSystem.readAsStringAsync(uri);
           console.log("File content (first 100 chars):", content.substring(0, 100));
@@ -58,43 +60,43 @@ const BatchUploadScreen = ({ navigation }) => {
       console.log("Processing CSV data, length:", csvContent.length);
       const lines = csvContent.split('\n');
       console.log("Found lines:", lines.length);
-      
+
       if (lines.length > 0) {
         console.log("First line:", lines[0]);
       }
-      
+
       const parsedResults = [];
-      
+
       const startIdx = 1;
-      
+
       for (let i = startIdx; i < lines.length; i++) {
         const line = lines[i].trim();
         if (!line) continue;
-        
+
         const [patientID, gender, ethnicity, ageStr, creatinine] = line.split(',');
-        
+
         if (!patientID || gender === undefined || !ethnicity || !ageStr || !creatinine) {
           continue;
         }
-        
+
         const age = parseInt(ageStr);
-        
+
         if (isNaN(age) || age < 18 || age > 110) {
           continue;
         }
-        
+
         const isFemale = gender === '0';
-        
+
         const isBlack = ethnicity === 'B';
-        
+
         const creatValue = parseFloat(creatinine);
-        
+
         if (isNaN(creatValue) || creatValue <= 0) {
           continue;
         }
-        
+
         const result = calculateEGFR(creatValue, age, isFemale, isBlack);
-        
+
         parsedResults.push({
           patientID,
           age,
@@ -105,9 +107,9 @@ const BatchUploadScreen = ({ navigation }) => {
           stage: result.stage
         });
       }
-      
+
       setResults(parsedResults);
-      
+
       if (parsedResults.length > 0) {
         const newHistory = parsedResults.map(item => ({
           date: new Date().toISOString(),
@@ -116,7 +118,7 @@ const BatchUploadScreen = ({ navigation }) => {
           eGFR: item.eGFR,
           stage: item.stage
         }));
-        
+
         setUserSession({
           ...userSession,
           calculationHistory: [
@@ -143,6 +145,62 @@ const BatchUploadScreen = ({ navigation }) => {
     }
   };
 
+  // New function to export results
+  const exportResults = async () => {
+    if (results.length === 0) {
+      Alert.alert('No Data', 'There are no results to export.');
+      return;
+    }
+
+    try {
+      setExporting(true);
+
+      // Create CSV header
+      let csvContent = 'Patient ID,Age,Gender,Ethnicity,Creatinine,eGFR,CKD Stage\n';
+
+      // Add data rows
+      results.forEach(item => {
+        csvContent += `${item.patientID},${item.age},${item.gender},${item.ethnicity},${item.creatinine},${item.eGFR.toFixed(1)},${item.stage}\n`;
+      });
+
+      // Create a temporary file
+      const fileName = `ckd_results_${new Date().getTime()}.csv`;
+      const fileUri = `${FileSystem.cacheDirectory}${fileName}`;
+
+      // Write the CSV content to the file
+      await FileSystem.writeAsStringAsync(fileUri, csvContent);
+
+      // Check if sharing is available
+      if (Platform.OS === 'ios' || Platform.OS === 'android') {
+        const isAvailable = await Sharing.isAvailableAsync();
+
+        if (isAvailable) {
+          // Share the file
+          await Sharing.shareAsync(fileUri);
+        } else {
+          // Fallback for web or when sharing is not available
+          Share.share({
+            message: csvContent,
+            title: "CKD Calculation Results",
+          });
+        }
+      } else {
+        // Fallback for web
+        Share.share({
+          message: csvContent,
+          title: "CKD Calculation Results",
+        });
+      }
+
+      console.log("Export successful");
+    } catch (error) {
+      console.error("Export error:", error);
+      Alert.alert('Export Failed', 'Failed to export the results.');
+    } finally {
+      setExporting(false);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Batch eGFR Calculation</Text>
@@ -150,9 +208,9 @@ const BatchUploadScreen = ({ navigation }) => {
         Upload a CSV file with patient data in the following format:
         PatientID,Gender,Ethnicity,Age,Creatinine
       </Text>
-      
-      <TouchableOpacity 
-        style={styles.button} 
+
+      <TouchableOpacity
+        style={styles.button}
         onPress={pickCSVFile}
         disabled={uploading}
       >
@@ -160,9 +218,9 @@ const BatchUploadScreen = ({ navigation }) => {
           {uploading ? 'Processing...' : 'Select CSV File'}
         </Text>
       </TouchableOpacity>
-      
+
       <Text style={styles.orText}>OR</Text>
-      
+
       <Text style={styles.label}>Enter CSV data manually:</Text>
       <TextInput
         style={styles.textArea}
@@ -172,36 +230,47 @@ const BatchUploadScreen = ({ navigation }) => {
         onChangeText={handleManualCSVInput}
         placeholder="PatientID,Gender,Ethnicity,Age,Creatinine"
       />
-      
-      <TouchableOpacity 
-        style={[styles.button, styles.secondaryButton]} 
+
+      <TouchableOpacity
+        style={[styles.button, styles.secondaryButton]}
         onPress={processManualInput}
       >
         <Text style={styles.buttonText}>Process Data</Text>
       </TouchableOpacity>
-      
+
       {results.length > 0 && (
         <View style={styles.resultsContainer}>
           <Text style={styles.resultsTitle}>Results ({results.length})</Text>
-          
+
           <View style={styles.tableHeader}>
             <Text style={[styles.tableCell, styles.idCell]}>Patient ID</Text>
             <Text style={styles.tableCell}>eGFR</Text>
             <Text style={styles.tableCell}>Stage</Text>
           </View>
-          
+
           {results.map((item, index) => (
             <View key={index} style={styles.tableRow}>
               <Text style={[styles.tableCell, styles.idCell]} numberOfLines={1}>{item.patientID}</Text>
               <Text style={styles.tableCell}>{item.eGFR.toFixed(1)}</Text>
-              <Text style={[styles.tableCell, 
-                item.stage <= 2 ? styles.stageGood : 
-                item.stage === '3A' || item.stage === '3B' ? styles.stageWarning : 
-                styles.stageCritical]}>
+              <Text style={[styles.tableCell,
+              item.stage <= 2 ? styles.stageGood :
+                item.stage === '3A' || item.stage === '3B' ? styles.stageWarning :
+                  styles.stageCritical]}>
                 {item.stage}
               </Text>
             </View>
           ))}
+
+          {/* Export Button */}
+          <TouchableOpacity
+            style={[styles.button, styles.exportButton]}
+            onPress={exportResults}
+            disabled={exporting || results.length === 0}
+          >
+            <Text style={styles.buttonText}>
+              {exporting ? 'Exporting...' : 'Export Results to CSV'}
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
     </ScrollView>
@@ -258,6 +327,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#005EB8',
     marginBottom: 20,
   },
+  exportButton: {
+    backgroundColor: '#28a745',
+    marginTop: 20,
+    marginBottom: 10,
+  },
   resultsContainer: {
     marginTop: 20,
   },
@@ -283,7 +357,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   idCell: {
-    flex: 2, 
+    flex: 2,
   },
   stageGood: {
     color: 'green',

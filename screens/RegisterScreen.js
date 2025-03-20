@@ -1,14 +1,14 @@
 import React, { useState, useContext } from 'react';
-import { 
-  View, 
-  Text, 
-  TextInput, 
-  TouchableOpacity, 
-  StyleSheet, 
-  ScrollView, 
-  KeyboardAvoidingView, 
-  Platform, 
-  Alert 
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  Alert
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { UserContext } from '../userContext';
@@ -30,51 +30,51 @@ const RegisterScreen = ({ navigation }) => {
       Alert.alert('Required Field', 'Please enter your full name');
       return false;
     }
-    
+
     if (!idNumber.trim()) {
       Alert.alert('Required Field', userType === 'patient' ? 'Please enter your NHS number' : 'Please enter your HCP ID');
       return false;
     }
-    
+
     if (!email.trim()) {
       Alert.alert('Required Field', 'Please enter your email address');
       return false;
     }
-    
+
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       Alert.alert('Invalid Email', 'Please enter a valid email address');
       return false;
     }
-    
+
     if (!password) {
       Alert.alert('Required Field', 'Please enter a password');
       return false;
     }
-    
+
     if (password.length < 8) {
       Alert.alert('Weak Password', 'Password must be at least 8 characters long');
       return false;
     }
-    
+
     if (password !== confirmPassword) {
       Alert.alert('Password Mismatch', 'Passwords do not match');
       return false;
     }
-    
+
     // Validate NHS number format (10 digits) for patients
     if (userType === 'patient' && (!/^\d{10}$/.test(idNumber))) {
       Alert.alert('Invalid NHS Number', 'NHS number must be 10 digits');
       return false;
     }
-    
+
     // Validate HCP ID format for clinicians
     if (userType === 'clinician' && !idNumber.trim()) {
       Alert.alert('Invalid HCP ID', 'Please enter a valid HCP ID');
       return false;
     }
-    
+
     return true;
   };
 
@@ -83,21 +83,21 @@ const RegisterScreen = ({ navigation }) => {
     if (!validateForm()) return;
 
     setLoading(true);
-    
+
     try {
       // Simulate API registration with timeout
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       // In a real app, you would send registration data to your backend
       // and receive a success response
-      
+
       // Option 1: Just show success and redirect to login
       Alert.alert(
         'Registration Successful',
         'Your account has been created. You can now log in.',
         [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
       );
-      
+
       // Option 2: Auto-login after successful registration
       /*
       setUserSession({
@@ -112,7 +112,7 @@ const RegisterScreen = ({ navigation }) => {
       });
       navigation.replace('Home');
       */
-      
+
     } catch (error) {
       Alert.alert('Registration Failed', 'An error occurred. Please try again.');
       console.error('Registration error:', error);
@@ -129,7 +129,7 @@ const RegisterScreen = ({ navigation }) => {
       >
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <Text style={styles.title}>Create Your Account</Text>
-          
+
           <View style={styles.formContainer}>
             <View style={styles.userTypeContainer}>
               <TouchableOpacity
@@ -143,7 +143,7 @@ const RegisterScreen = ({ navigation }) => {
                   Patient
                 </Text>
               </TouchableOpacity>
-              
+
               <TouchableOpacity
                 style={[
                   styles.userTypeButton,
@@ -156,7 +156,7 @@ const RegisterScreen = ({ navigation }) => {
                 </Text>
               </TouchableOpacity>
             </View>
-            
+
             <Text style={styles.inputLabel}>Full Name</Text>
             <TextInput
               style={styles.input}
@@ -165,7 +165,7 @@ const RegisterScreen = ({ navigation }) => {
               placeholder="Enter your full name"
               autoCapitalize="words"
             />
-            
+
             <Text style={styles.inputLabel}>
               {userType === 'patient' ? 'NHS Number' : 'HCP ID'}
             </Text>
@@ -177,7 +177,7 @@ const RegisterScreen = ({ navigation }) => {
               keyboardType="number-pad"
               maxLength={userType === 'patient' ? 10 : 8}
             />
-            
+
             <Text style={styles.inputLabel}>Email Address</Text>
             <TextInput
               style={styles.input}
@@ -187,7 +187,7 @@ const RegisterScreen = ({ navigation }) => {
               keyboardType="email-address"
               autoCapitalize="none"
             />
-            
+
             <Text style={styles.inputLabel}>Password</Text>
             <TextInput
               style={styles.input}
@@ -197,7 +197,7 @@ const RegisterScreen = ({ navigation }) => {
               secureTextEntry
               autoCapitalize="none"
             />
-            
+
             <Text style={styles.inputLabel}>Confirm Password</Text>
             <TextInput
               style={styles.input}
@@ -207,8 +207,8 @@ const RegisterScreen = ({ navigation }) => {
               secureTextEntry
               autoCapitalize="none"
             />
-            
-            <TouchableOpacity 
+
+            <TouchableOpacity
               style={[styles.registerButton, loading && styles.disabledButton]}
               onPress={handleRegister}
               disabled={loading}
@@ -217,7 +217,7 @@ const RegisterScreen = ({ navigation }) => {
                 {loading ? 'Creating Account...' : 'Create Account'}
               </Text>
             </TouchableOpacity>
-            
+
             <View style={styles.loginContainer}>
               <Text style={styles.loginText}>Already have an account? </Text>
               <TouchableOpacity onPress={() => navigation.navigate('Login')}>
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#005eb8', // NHS blue
+    color: '#005eb8',
     marginBottom: 24,
     textAlign: 'center',
   },

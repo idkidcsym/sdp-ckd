@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react';
-import { 
-  View, 
-  Text, 
-  TextInput, 
-  TouchableOpacity, 
-  StyleSheet, 
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -38,11 +38,11 @@ const LoginScreen = ({ navigation }) => {
 
     // In a real app, you would validate credentials against a backend
     setLoading(true);
-    
+
     try {
       // Simulate API call with timeout
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       // Store user type and id if remember me is checked
       if (rememberMe) {
         await AsyncStorage.setItem('userType', userType);
@@ -52,7 +52,7 @@ const LoginScreen = ({ navigation }) => {
         await AsyncStorage.removeItem('userType');
         await AsyncStorage.removeItem('idNumber');
       }
-      
+
       // Set user session in context
       setUserSession({
         isLoggedIn: true,
@@ -61,14 +61,14 @@ const LoginScreen = ({ navigation }) => {
         userProfile: {
           // Mock profile data - in a real app this would come from your backend
           name: userType === 'patient' ? 'John Patient' : 'Dr. Jane Smith',
-          email: userType === 'patient' ? 'patient@example.com' : 'doctor@nhs.uk',
+          email: userType === 'patient' ? 'patient@example.com' : 'doctor@idk.uk',
         },
         calculationHistory: [] // Initialize with empty history
       });
-      
+
       // Navigate to Home screen
       navigation.replace('Home');
-      
+
     } catch (error) {
       Alert.alert('Login Failed', 'An error occurred during login. Please try again.');
       console.error('Login error:', error);
@@ -83,7 +83,7 @@ const LoginScreen = ({ navigation }) => {
       try {
         const storedUserType = await AsyncStorage.getItem('userType');
         const storedIdNumber = await AsyncStorage.getItem('idNumber');
-        
+
         if (storedUserType && storedIdNumber) {
           setUserType(storedUserType);
           setIdNumber(storedIdNumber);
@@ -93,7 +93,7 @@ const LoginScreen = ({ navigation }) => {
         console.error('Error retrieving stored credentials:', error);
       }
     };
-    
+
     checkStoredCredentials();
   }, []);
 
@@ -105,8 +105,8 @@ const LoginScreen = ({ navigation }) => {
       >
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.logoContainer}>
-            <Image 
-              source={require('../assets/nhs-logo.png')}
+            <Image
+              source={require('../assets/icon.png')}
               style={styles.logo}
               resizeMode="contain"
             />
@@ -115,7 +115,7 @@ const LoginScreen = ({ navigation }) => {
               Login to access your personal calculator
             </Text>
           </View>
-          
+
           <View style={styles.formContainer}>
             <View style={styles.userTypeContainer}>
               <TouchableOpacity
@@ -129,7 +129,7 @@ const LoginScreen = ({ navigation }) => {
                   Patient
                 </Text>
               </TouchableOpacity>
-              
+
               <TouchableOpacity
                 style={[
                   styles.userTypeButton,
@@ -142,7 +142,7 @@ const LoginScreen = ({ navigation }) => {
                 </Text>
               </TouchableOpacity>
             </View>
-            
+
             <Text style={styles.inputLabel}>
               {userType === 'patient' ? 'NHS Number' : 'HCP ID'}
             </Text>
@@ -155,7 +155,7 @@ const LoginScreen = ({ navigation }) => {
               maxLength={userType === 'patient' ? 10 : 8}
               autoCapitalize="none"
             />
-            
+
             <Text style={styles.inputLabel}>Password</Text>
             <TextInput
               style={styles.input}
@@ -165,9 +165,9 @@ const LoginScreen = ({ navigation }) => {
               secureTextEntry
               autoCapitalize="none"
             />
-            
+
             <View style={styles.rememberMeContainer}>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.checkboxContainer}
                 onPress={() => setRememberMe(!rememberMe)}
               >
@@ -176,13 +176,13 @@ const LoginScreen = ({ navigation }) => {
                 </View>
                 <Text style={styles.rememberMeText}>Remember me</Text>
               </TouchableOpacity>
-              
+
               <TouchableOpacity>
                 <Text style={styles.forgotPassword}>Forgot Password?</Text>
               </TouchableOpacity>
             </View>
-            
-            <TouchableOpacity 
+
+            <TouchableOpacity
               style={[styles.loginButton, loading && styles.loginButtonDisabled]}
               onPress={handleLogin}
               disabled={loading}
@@ -191,15 +191,15 @@ const LoginScreen = ({ navigation }) => {
                 {loading ? 'Logging in...' : 'Login'}
               </Text>
             </TouchableOpacity>
-            
+
             <View style={styles.registerContainer}>
               <Text style={styles.registerText}>Don't have an account? </Text>
               <TouchableOpacity onPress={() => navigation.navigate('Register')}>
                 <Text style={styles.registerLink}>Register</Text>
               </TouchableOpacity>
             </View>
-            
-            <TouchableOpacity 
+
+            <TouchableOpacity
               style={styles.guestButton}
               onPress={() => {
                 // Set guest user session
@@ -249,12 +249,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#005eb8', // NHS blue
+    color: '#005eb8',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#425563', // NHS dark gray
+    color: '#425563',
     textAlign: 'center',
     paddingHorizontal: 20,
   },

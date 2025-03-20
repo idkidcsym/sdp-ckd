@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const HomeScreen = ({ navigation }) => {
   const { userSession, setUserSession } = useContext(UserContext);
-  
+
   // Check if user is logged in
   useEffect(() => {
     if (!userSession.isLoggedIn && userSession.userType !== 'guest') {
@@ -37,14 +37,14 @@ const HomeScreen = ({ navigation }) => {
       <StatusBar style="auto" />
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <Image 
+          <Image
             source={require('../assets/kidney-icon.png')}
             style={styles.dashboardLogo}
             resizeMode="contain"
           />
-          <Text style={styles.title}>NHS CKD Risk Calculator</Text>
+          <Text style={styles.title}>CKD Risk Calculator</Text>
         </View>
-        
+
         <View style={styles.userInfoContainer}>
           {userSession.userType === 'guest' ? (
             <Text style={styles.welcomeText}>Welcome, Guest User</Text>
@@ -54,10 +54,10 @@ const HomeScreen = ({ navigation }) => {
             </Text>
           )}
         </View>
-        
+
         <View style={styles.cardContainer}>
           {/* Calculate eGFR Card */}
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.card}
             onPress={() => {
               if (userSession.userType === 'clinician') {
@@ -77,10 +77,10 @@ const HomeScreen = ({ navigation }) => {
               </Text>
             </View>
           </TouchableOpacity>
-          
+
           {/* Batch Calculate Card - Clinician only */}
           {userSession.userType === 'clinician' && (
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.card}
               onPress={() => navigation.navigate('BatchUpload')}
             >
@@ -95,9 +95,9 @@ const HomeScreen = ({ navigation }) => {
               </View>
             </TouchableOpacity>
           )}
-          
+
           {/* Information Card */}
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.card}
             onPress={() => navigation.navigate('Info')}
           >
@@ -111,10 +111,10 @@ const HomeScreen = ({ navigation }) => {
               </Text>
             </View>
           </TouchableOpacity>
-          
+
           {/* History Card - Logged in users only */}
           {userSession.isLoggedIn && (
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.card}
               onPress={() => navigation.navigate('History')}
             >
@@ -129,10 +129,10 @@ const HomeScreen = ({ navigation }) => {
               </View>
             </TouchableOpacity>
           )}
-          
+
           {/* Profile Card - Logged in users only */}
           {userSession.isLoggedIn && (
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.card}
               onPress={() => navigation.navigate('Profile')}
             >
@@ -148,17 +148,17 @@ const HomeScreen = ({ navigation }) => {
             </TouchableOpacity>
           )}
         </View>
-        
+
         {/* Sign Out Button - Logged in users only */}
         {userSession.isLoggedIn ? (
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.logoutButton}
             onPress={handleLogout}
           >
             <Text style={styles.logoutButtonText}>Sign Out</Text>
           </TouchableOpacity>
         ) : userSession.userType === 'guest' ? (
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.loginButton}
             onPress={() => navigation.navigate('Login')}
           >
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: '#0072CE', // NHS Blue
+    color: '#0072CE',
     textAlign: 'center',
   },
   subtitle: {
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   button: {
-    backgroundColor: '#0072CE', // NHS Blue
+    backgroundColor: '#0072CE',
     paddingVertical: 12,
     paddingHorizontal: 30,
     borderRadius: 5,
@@ -212,12 +212,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   secondaryButton: {
-    backgroundColor: '#005EB8', // Darker NHS Blue
+    backgroundColor: '#005EB8',
   },
   tertiaryButton: {
-    backgroundColor: '#41B6E6', // Lighter NHS Blue
+    backgroundColor: '#41B6E6',
   },
-  
+
   // New styles for dashboard
   dashboardContainer: {
     flex: 1,
