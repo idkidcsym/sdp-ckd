@@ -15,6 +15,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { UserContext } from '../userContext'; // Import the UserContext
 
+// Mock user database
+const MOCK_USERS = {
+  patients: [
+    { id: '1234567890', password: 'patient123', name: 'John Patient', email: 'john@example.com' },
+    { id: '9876543210', password: 'patient456', name: 'Sarah Jones', email: 'sarah@example.com' },
+  ],
+  clinicians: [
+    { id: '12345678', password: 'doctor123', name: 'Dr. Jane Smith', email: 'doctor@hospital.uk' },
+    { id: '87654321', password: 'doctor456', name: 'Dr. Robert Brown', email: 'rbrown@hospital.uk' },
+  ]
+};
+
 const LoginScreen = ({ navigation }) => {
   const { userSession, setUserSession } = useContext(UserContext); // Use the UserContext
   const [userType, setUserType] = useState('patient'); // 'patient' or 'clinician'
@@ -22,26 +34,44 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // Function to validate credentials against mock database
+  const validateCredentials = (id, pwd, type) => {
+    const users = type === 'patient' ? MOCK_USERS.patients : MOCK_USERS.clinicians;
+    return users.find(user => user.id === id && user.password === pwd);
+  };
 
   // Function to handle user login
   const handleLogin = async () => {
+    // Reset error message
+    setErrorMessage('');
+
     // Validate input fields
     if (!idNumber.trim()) {
-      Alert.alert('Required Field', userType === 'patient' ? 'Please enter your NHS number' : 'Please enter your HCP ID');
+      setErrorMessage(userType === 'patient' ? 'Please enter your NHS number' : 'Please enter your HCP ID');
       return;
     }
 
     if (!password.trim()) {
-      Alert.alert('Required Field', 'Please enter your password');
+      setErrorMessage('Please enter your password');
       return;
     }
 
-    // In a real app, you would validate credentials against a backend
     setLoading(true);
 
     try {
       // Simulate API call with timeout
       await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Validate credentials
+      const user = validateCredentials(idNumber, password, userType);
+
+      if (!user) {
+        setErrorMessage('Invalid credentials. Please try again.');
+        setLoading(false);
+        return;
+      }
 
       // Store user type and id if remember me is checked
       if (rememberMe) {
@@ -53,15 +83,14 @@ const LoginScreen = ({ navigation }) => {
         await AsyncStorage.removeItem('idNumber');
       }
 
-      // Set user session in context
+      // Set user session in context with user data from our database
       setUserSession({
         isLoggedIn: true,
         userType: userType,
         userId: idNumber,
         userProfile: {
-          // Mock profile data - in a real app this would come from your backend
-          name: userType === 'patient' ? 'John Patient' : 'Dr. Jane Smith',
-          email: userType === 'patient' ? 'patient@example.com' : 'doctor@idk.uk',
+          name: user.name,
+          email: user.email,
         },
         calculationHistory: [] // Initialize with empty history
       });
@@ -70,7 +99,7 @@ const LoginScreen = ({ navigation }) => {
       navigation.replace('Home');
 
     } catch (error) {
-      Alert.alert('Login Failed', 'An error occurred during login. Please try again.');
+      setErrorMessage('An error occurred during login. Please try again.');
       console.error('Login error:', error);
     } finally {
       setLoading(false);
@@ -143,13 +172,20 @@ const LoginScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
 
+            {errorMessage ? (
+              <Text style={styles.errorText}>{errorMessage}</Text>
+            ) : null}
+
             <Text style={styles.inputLabel}>
               {userType === 'patient' ? 'NHS Number' : 'HCP ID'}
             </Text>
             <TextInput
               style={styles.input}
               value={idNumber}
-              onChangeText={setIdNumber}
+              onChangeText={(text) => {
+                setIdNumber(text);
+                setErrorMessage(''); // Clear error on input change
+              }}
               placeholder={userType === 'patient' ? 'Enter your NHS number' : 'Enter your HCP ID'}
               keyboardType="number-pad"
               maxLength={userType === 'patient' ? 10 : 8}
@@ -160,7 +196,10 @@ const LoginScreen = ({ navigation }) => {
             <TextInput
               style={styles.input}
               value={password}
-              onChangeText={setPassword}
+              onChangeText={(text) => {
+                setPassword(text);
+                setErrorMessage(''); // Clear error on input change
+              }}
               placeholder="Enter your password"
               secureTextEntry
               autoCapitalize="none"
@@ -191,6 +230,13 @@ const LoginScreen = ({ navigation }) => {
                 {loading ? 'Logging in...' : 'Login'}
               </Text>
             </TouchableOpacity>
+
+            {/* Login demo information */}
+            <View style={styles.demoInfoContainer}>
+              <Text style={styles.demoTitle}>Demo Login Credentials:</Text>
+              <Text style={styles.demoText}>Patient: 1234567890 / patient123</Text>
+              <Text style={styles.demoText}>Clinician: 12345678 / doctor123</Text>
+            </View>
 
             <View style={styles.registerContainer}>
               <Text style={styles.registerText}>Don't have an account? </Text>
@@ -289,6 +335,11 @@ const styles = StyleSheet.create({
   inactiveText: {
     color: '#768692',
   },
+  errorText: {
+    color: '#d9534f',
+    marginBottom: 10,
+    fontSize: 14,
+  },
   inputLabel: {
     fontSize: 16,
     color: '#425563',
@@ -354,6 +405,23 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 16,
     fontWeight: '600',
+  },
+  demoInfoContainer: {
+    backgroundColor: '#f0f4f5',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+  },
+  demoTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#425563',
+    marginBottom: 4,
+  },
+  demoText: {
+    fontSize: 13,
+    color: '#768692',
+    marginBottom: 2,
   },
   registerContainer: {
     flexDirection: 'row',
