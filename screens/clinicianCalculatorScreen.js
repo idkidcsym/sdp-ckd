@@ -62,8 +62,6 @@ const ClinicianCalculatorScreen = ({ navigation }) => {
 
     setUserSession({
       ...userSession,
-      userType: 'clinician',
-      userId: formData.hcpId,
       calculationHistory: [
         ...userSession.calculationHistory,
         {

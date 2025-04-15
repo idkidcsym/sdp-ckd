@@ -28,21 +28,19 @@ const MOCK_USERS = {
 };
 
 const LoginScreen = ({ navigation }) => {
-  const { userSession, setUserSession } = useContext(UserContext); // Use the UserContext
-  const [userType, setUserType] = useState('patient'); // 'patient' or 'clinician'
+  const { userSession, setUserSession } = useContext(UserContext);
+  const [userType, setUserType] = useState('patient');
   const [idNumber, setIdNumber] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Function to validate credentials against mock database
   const validateCredentials = (id, pwd, type) => {
     const users = type === 'patient' ? MOCK_USERS.patients : MOCK_USERS.clinicians;
     return users.find(user => user.id === id && user.password === pwd);
   };
 
-  // Function to handle user login
   const handleLogin = async () => {
     setErrorMessage('');
     if (!idNumber.trim()) {
@@ -131,9 +129,6 @@ const LoginScreen = ({ navigation }) => {
               resizeMode="contain"
             />
             <Text style={styles.title}>Nephro Calc</Text>
-            <Text style={styles.subtitle}>
-              Login to access your personal calculator
-            </Text>
           </View>
 
           <View style={styles.formContainer}>
@@ -175,7 +170,7 @@ const LoginScreen = ({ navigation }) => {
               value={idNumber}
               onChangeText={(text) => {
                 setIdNumber(text);
-                setErrorMessage(''); // Clear error on input change
+                setErrorMessage('');
               }}
               placeholder={userType === 'patient' ? 'Enter your NHS number' : 'Enter your HCP ID'}
               keyboardType="number-pad"
@@ -189,7 +184,7 @@ const LoginScreen = ({ navigation }) => {
               value={password}
               onChangeText={(text) => {
                 setPassword(text);
-                setErrorMessage(''); // Clear error on input change
+                setErrorMessage('');
               }}
               placeholder="Enter your password"
               secureTextEntry

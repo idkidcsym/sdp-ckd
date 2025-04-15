@@ -23,9 +23,7 @@ const RegisterScreen = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Function to validate the form
   const validateForm = () => {
-    // Basic validation
     if (!fullName.trim()) {
       Alert.alert('Required Field', 'Please enter your full name');
       return false;
@@ -41,7 +39,6 @@ const RegisterScreen = ({ navigation }) => {
       return false;
     }
 
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       Alert.alert('Invalid Email', 'Please enter a valid email address');
@@ -63,13 +60,13 @@ const RegisterScreen = ({ navigation }) => {
       return false;
     }
 
-    // Validate NHS number format (10 digits) for patients
+
     if (userType === 'patient' && (!/^\d{10}$/.test(idNumber))) {
       Alert.alert('Invalid NHS Number', 'NHS number must be 10 digits');
       return false;
     }
 
-    // Validate HCP ID format for clinicians
+
     if (userType === 'clinician' && !idNumber.trim()) {
       Alert.alert('Invalid HCP ID', 'Please enter a valid HCP ID');
       return false;
@@ -78,14 +75,13 @@ const RegisterScreen = ({ navigation }) => {
     return true;
   };
 
-  // Function to handle registration
   const handleRegister = async () => {
     if (!validateForm()) return;
 
     setLoading(true);
 
     try {
-      // Simulate API registration with timeout
+
       await new Promise(resolve => setTimeout(resolve, 1500));
 
 

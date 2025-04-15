@@ -1,6 +1,5 @@
 
 export const calculateEGFR = (creatinine, age, isFemale, isBlack) => {
-  // eGFR = 186 x (Creat / 88.4)^-1.154 x (Age)^-0.203 x (0.742 if female) x (1.210 if black)
 
   if (creatinine <= 0 || age < 18 || age > 110) {
     throw new Error('Invalid input values');

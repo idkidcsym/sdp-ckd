@@ -1,4 +1,3 @@
-// screens/PatientCalculatorScreen.js
 import React, { useState, useContext } from 'react';
 import {
   View, Text, StyleSheet, TextInput, TouchableOpacity,
@@ -24,7 +23,6 @@ const PatientCalculatorScreen = ({ navigation }) => {
 
   const [errors, setErrors] = useState({});
 
-  // Load saved data if exists
   React.useEffect(() => {
     const loadSavedData = async () => {
       try {
@@ -32,12 +30,6 @@ const PatientCalculatorScreen = ({ navigation }) => {
         if (savedData) {
           const parsedData = JSON.parse(savedData);
           setFormData({ ...formData, ...parsedData });
-          setUserSession({
-            ...userSession,
-            isLoggedIn: true,
-            userId: parsedData.nhsNumber,
-            userProfile: parsedData
-          });
         }
       } catch (error) {
         console.error('Error loading saved data', error);
@@ -73,13 +65,11 @@ const PatientCalculatorScreen = ({ navigation }) => {
   const handleCalculate = async () => {
     if (!validateForm()) return;
 
-    // Convert creatinine to micromol/l if needed
     let creatValue = parseFloat(formData.creatinine);
     if (formData.creatinineUnit === 'mg/dL') {
-      creatValue = creatValue * 88.4; // Convert to micromol/l
+      creatValue = creatValue * 88.4;
     }
 
-    // Calculate eGFR
     const result = calculateEGFR(
       creatValue,
       parseInt(formData.age),
@@ -87,7 +77,6 @@ const PatientCalculatorScreen = ({ navigation }) => {
       formData.isBlack
     );
 
-    // Save data if remember me is checked
     if (formData.rememberMe) {
       try {
         await AsyncStorage.setItem('patientData', JSON.stringify({
@@ -99,9 +88,6 @@ const PatientCalculatorScreen = ({ navigation }) => {
 
         setUserSession({
           ...userSession,
-          isLoggedIn: true,
-          userType: 'patient',
-          userId: formData.nhsNumber,
           userProfile: {
             age: formData.age,
             gender: formData.gender,
@@ -122,7 +108,6 @@ const PatientCalculatorScreen = ({ navigation }) => {
       }
     }
 
-    // Navigate to results screen
     navigation.navigate('Result', { result });
   };
 
@@ -196,10 +181,8 @@ const PatientCalculatorScreen = ({ navigation }) => {
           {errors.creatinine && <Text style={styles.errorText}>{errors.creatinine}</Text>}
         </View>
 
-        <Text style={styles.sectionTitle}>Save Your Information</Text>
-
         <View style={styles.formGroup}>
-          <Text style={styles.label}>NHS Number (optional):</Text>
+          <Text style={styles.label}>NHS Number:</Text>
           <TextInput
             style={[styles.input, errors.nhsNumber && styles.inputError]}
             keyboardType="numeric"
@@ -299,13 +282,13 @@ const styles = StyleSheet.create({
   },
   ethnicityContainer: {
     borderWidth: 1,
-    borderColor: '#ccc',  // Maintain your chosen theme color
+    borderColor: '#ccc',
     borderRadius: 8,
-    padding: 5,  // Keep padding to maintain internal space
-    marginBottom: 20,  // Space below the box
-    flexDirection: 'row', // Set children to line up in a row
-    alignItems: 'center', // Center items vertically
-    justifyContent: 'space-between', // Distribute space between children
+    padding: 5,
+    marginBottom: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   rememberMeContainer: {
     borderWidth: 1,
@@ -313,9 +296,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 5,
     marginBottom: 20,
-    flexDirection: 'row', // Arrange label and switch in a row
-    alignItems: 'center', // Align items vertically in the center
-    justifyContent: 'space-between', // Add space between the label and the switch
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });
 

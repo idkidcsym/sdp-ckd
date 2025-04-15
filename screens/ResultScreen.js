@@ -10,7 +10,7 @@ const ResultScreen = ({ route, navigation }) => {
 
   const screenWidth = Dimensions.get('window').width;
 
-  // Get CKD stage information based on user type
+
   const getStageInfo = () => {
     const isClinic = userSession.userType === 'clinician';
 
@@ -18,27 +18,27 @@ const ResultScreen = ({ route, navigation }) => {
       case 1:
         return isClinic
           ? 'Normal kidney function but with other findings. Consider regular monitoring.'
-          : 'Your kidneys are functioning normally, but there might be other findings that suggest kidney disease.';
+          : 'Kidneys are functioning normally, but there might be other findings that suggest kidney disease.';
       case 2:
         return isClinic
           ? 'Mildly reduced kidney function. Monitor and assess cardiovascular risk factors.'
-          : 'Your kidneys have mildly reduced function. Follow-up with your doctor for monitoring.';
+          : 'Kidneys have mildly reduced function. Follow-up with your doctor for monitoring.';
       case '3A':
         return isClinic
           ? 'Moderately reduced kidney function. Monitor at least every 6 months. Assess and manage CVD risk.'
-          : 'Your kidneys have moderately reduced function. Regular check-ups are important.';
+          : 'Kidneys have moderately reduced function. Regular check-ups are important.';
       case '3B':
         return isClinic
           ? 'Moderately reduced kidney function. Monitor quarterly. Consider nephrology referral.'
-          : 'Your kidneys have moderately reduced function. More frequent monitoring is recommended.';
+          : 'Kidneys have moderately reduced function. More frequent monitoring is recommended.';
       case 4:
         return isClinic
           ? 'Severely reduced kidney function. Likely requires nephrology referral.'
-          : 'Your kidneys have severely reduced function. You should be under specialist care.';
+          : 'Kidneys have severely reduced function. You should be under specialist care.';
       case 5:
         return isClinic
           ? 'Very severe reduction or kidney failure. Patient needs nephrologist care.'
-          : 'Your kidneys have very severe reduced function or failure. Specialist care is essential.';
+          : 'Kidneys have very severe reduced function or failure. Specialist care is essential.';
       default:
         return 'No specific recommendations for this result.';
     }

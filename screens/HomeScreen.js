@@ -1,4 +1,4 @@
-// screens/HomeScreen.js
+
 import React, { useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
@@ -8,13 +8,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const HomeScreen = ({ navigation }) => {
   const { userSession, setUserSession } = useContext(UserContext);
 
-  // Check if user is logged in
-  useEffect(() => {
-    if (!userSession.isLoggedIn && userSession.userType !== 'guest') {
-    }
-  }, [userSession.isLoggedIn, navigation]);
-
-  // Handle logout
   const handleLogout = () => {
     setUserSession({
       isLoggedIn: false,
@@ -35,7 +28,7 @@ const HomeScreen = ({ navigation }) => {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
           <Image
-            source={require('../assets/kidney-icon.png')}
+            source={require('../assets/icon.png')}
             style={styles.dashboardLogo}
             resizeMode="contain"
           />
@@ -44,7 +37,7 @@ const HomeScreen = ({ navigation }) => {
 
         <View style={styles.userInfoContainer}>
           {userSession.userType === 'guest' ? (
-            <Text style={styles.welcomeText}>Welcome, Guest User</Text>
+            <Text style={styles.welcomeText}>Welcome, Guest</Text>
           ) : (
             <Text style={styles.welcomeText}>
               Welcome, {userSession.userType === 'patient' ? 'Patient' : 'Clinician'} {userSession.userProfile?.name || userSession.userId}
@@ -53,7 +46,6 @@ const HomeScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.cardContainer}>
-          {/* Calculate eGFR Card */}
           <TouchableOpacity
             style={styles.card}
             onPress={() => {
@@ -75,7 +67,7 @@ const HomeScreen = ({ navigation }) => {
             </View>
           </TouchableOpacity>
 
-          {/* Batch Calculate Card - Clinician only */}
+
           {userSession.userType === 'clinician' && (
             <TouchableOpacity
               style={styles.card}
@@ -93,7 +85,7 @@ const HomeScreen = ({ navigation }) => {
             </TouchableOpacity>
           )}
 
-          {/* Information Card */}
+
           <TouchableOpacity
             style={styles.card}
             onPress={() => navigation.navigate('Info')}
@@ -109,7 +101,6 @@ const HomeScreen = ({ navigation }) => {
             </View>
           </TouchableOpacity>
 
-          {/* History Card - Logged in users only */}
           {userSession.isLoggedIn && (
             <TouchableOpacity
               style={styles.card}
@@ -127,7 +118,6 @@ const HomeScreen = ({ navigation }) => {
             </TouchableOpacity>
           )}
 
-          {/* Profile Card - Logged in users only */}
           {userSession.isLoggedIn && (
             <TouchableOpacity
               style={styles.card}
@@ -146,7 +136,6 @@ const HomeScreen = ({ navigation }) => {
           )}
         </View>
 
-        {/* Sign Out Button - Logged in users only */}
         {userSession.isLoggedIn ? (
           <TouchableOpacity
             style={styles.logoutButton}
@@ -168,7 +157,6 @@ const HomeScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  // Original styles for welcome screen
   container: {
     flex: 1,
     alignItems: 'center',
