@@ -93,7 +93,7 @@ const InfoScreen = () => {
     </ScrollView>
   );
 };
-// Make sure you define your styles object
+
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: undefined,
-    aspectRatio: 1.5, // Adjust this based on your image's aspect ratio
+    aspectRatio: 1.5,
   }
 });
 

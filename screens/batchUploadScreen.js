@@ -145,7 +145,6 @@ const BatchUploadScreen = ({ navigation }) => {
     }
   };
 
-  // New function to export results
   const exportResults = async () => {
     if (results.length === 0) {
       Alert.alert('No Data', 'There are no results to export.');
@@ -155,37 +154,28 @@ const BatchUploadScreen = ({ navigation }) => {
     try {
       setExporting(true);
 
-      // Create CSV header
       let csvContent = 'Patient ID,Age,Gender,Ethnicity,Creatinine,eGFR,CKD Stage\n';
 
-      // Add data rows
       results.forEach(item => {
         csvContent += `${item.patientID},${item.age},${item.gender},${item.ethnicity},${item.creatinine},${item.eGFR.toFixed(1)},${item.stage}\n`;
       });
 
-      // Create a temporary file
       const fileName = `ckd_results_${new Date().getTime()}.csv`;
       const fileUri = `${FileSystem.cacheDirectory}${fileName}`;
-
-      // Write the CSV content to the file
       await FileSystem.writeAsStringAsync(fileUri, csvContent);
 
-      // Check if sharing is available
       if (Platform.OS === 'ios' || Platform.OS === 'android') {
         const isAvailable = await Sharing.isAvailableAsync();
 
         if (isAvailable) {
-          // Share the file
           await Sharing.shareAsync(fileUri);
         } else {
-          // Fallback for web or when sharing is not available
           Share.share({
             message: csvContent,
             title: "CKD Calculation Results",
           });
         }
       } else {
-        // Fallback for web
         Share.share({
           message: csvContent,
           title: "CKD Calculation Results",

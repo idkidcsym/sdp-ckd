@@ -88,30 +88,12 @@ const RegisterScreen = ({ navigation }) => {
       // Simulate API registration with timeout
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // In a real app, you would send registration data to your backend
-      // and receive a success response
 
-      // Option 1: Just show success and redirect to login
       Alert.alert(
         'Registration Successful',
         'Your account has been created. You can now log in.',
         [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
       );
-
-      // Option 2: Auto-login after successful registration
-      /*
-      setUserSession({
-        isLoggedIn: true,
-        userType: userType,
-        userId: idNumber,
-        userProfile: {
-          name: fullName,
-          email: email,
-        },
-        calculationHistory: []
-      });
-      navigation.replace('Home');
-      */
 
     } catch (error) {
       Alert.alert('Registration Failed', 'An error occurred. Please try again.');

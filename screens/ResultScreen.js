@@ -7,16 +7,16 @@ import { UserContext } from '../userContext';
 const ResultScreen = ({ route, navigation }) => {
   const { result, patientInfo } = route.params;
   const { userSession } = useContext(UserContext);
-  
+
   const screenWidth = Dimensions.get('window').width;
-  
+
   // Get CKD stage information based on user type
   const getStageInfo = () => {
     const isClinic = userSession.userType === 'clinician';
-    
-    switch(result.stage) {
+
+    switch (result.stage) {
       case 1:
-        return isClinic 
+        return isClinic
           ? 'Normal kidney function but with other findings. Consider regular monitoring.'
           : 'Your kidneys are functioning normally, but there might be other findings that suggest kidney disease.';
       case 2:
@@ -43,11 +43,10 @@ const ResultScreen = ({ route, navigation }) => {
         return 'No specific recommendations for this result.';
     }
   };
-  
-  // Prepare history data for chart if available
+
   const historyData = {
-    labels: userSession.calculationHistory.length > 0 
-      ? userSession.calculationHistory.slice(-7).map((item, index) => `${index+1}`)
+    labels: userSession.calculationHistory.length > 0
+      ? userSession.calculationHistory.slice(-7).map((item, index) => `${index + 1}`)
       : ['1'],
     datasets: [{
       data: userSession.calculationHistory.length > 0
@@ -57,7 +56,7 @@ const ResultScreen = ({ route, navigation }) => {
       strokeWidth: 2
     }]
   };
-  
+
   const chartConfig = {
     backgroundGradientFrom: '#ffffff',
     backgroundGradientTo: '#ffffff',
@@ -79,21 +78,21 @@ const ResultScreen = ({ route, navigation }) => {
       <View style={styles.resultCard}>
         <Text style={styles.resultTitle}>eGFR Result</Text>
         <Text style={styles.resultValue}>{result.eGFR.toFixed(1)} ml/min/1.73m²</Text>
-        
+
         <View style={styles.stageContainer}>
           <Text style={styles.stageLabel}>CKD Stage:</Text>
-          <Text style={[styles.stageValue, 
-            result.stage <= 2 ? styles.stageGood : 
-            result.stage === '3A' || result.stage === '3B' ? styles.stageWarning : 
-            styles.stageCritical]}>
+          <Text style={[styles.stageValue,
+          result.stage <= 2 ? styles.stageGood :
+            result.stage === '3A' || result.stage === '3B' ? styles.stageWarning :
+              styles.stageCritical]}>
             {result.stage}
           </Text>
         </View>
-        
+
         <Text style={styles.infoTitle}>What does this mean?</Text>
         <Text style={styles.infoText}>{getStageInfo()}</Text>
       </View>
-      
+
       {userSession.calculationHistory.length > 0 && (
         <View style={styles.chartCard}>
           <Text style={styles.chartTitle}>eGFR History</Text>
@@ -112,17 +111,17 @@ const ResultScreen = ({ route, navigation }) => {
           />
         </View>
       )}
-      
-      <TouchableOpacity 
-        style={styles.button} 
+
+      <TouchableOpacity
+        style={styles.button}
         onPress={() => navigation.navigate(userSession.userType === 'clinician' ? 'ClinicianCalculator' : 'PatientCalculator')}
       >
         <Text style={styles.buttonText}>New Calculation</Text>
       </TouchableOpacity>
-      
+
       {userSession.isLoggedIn && (
-        <TouchableOpacity 
-          style={[styles.button, styles.secondaryButton]} 
+        <TouchableOpacity
+          style={[styles.button, styles.secondaryButton]}
           onPress={() => navigation.navigate('History')}
         >
           <Text style={styles.buttonText}>View Full History</Text>

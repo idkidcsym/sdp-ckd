@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { UserContext } from '../userContext'; // Import the UserContext
+import { UserContext } from '../userContext';
 
 // Mock user database
 const MOCK_USERS = {
@@ -44,10 +44,7 @@ const LoginScreen = ({ navigation }) => {
 
   // Function to handle user login
   const handleLogin = async () => {
-    // Reset error message
     setErrorMessage('');
-
-    // Validate input fields
     if (!idNumber.trim()) {
       setErrorMessage(userType === 'patient' ? 'Please enter your NHS number' : 'Please enter your HCP ID');
       return;
@@ -61,10 +58,8 @@ const LoginScreen = ({ navigation }) => {
     setLoading(true);
 
     try {
-      // Simulate API call with timeout
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Validate credentials
       const user = validateCredentials(idNumber, password, userType);
 
       if (!user) {
@@ -73,17 +68,14 @@ const LoginScreen = ({ navigation }) => {
         return;
       }
 
-      // Store user type and id if remember me is checked
       if (rememberMe) {
         await AsyncStorage.setItem('userType', userType);
         await AsyncStorage.setItem('idNumber', idNumber);
       } else {
-        // Clear any stored values if not remembering
         await AsyncStorage.removeItem('userType');
         await AsyncStorage.removeItem('idNumber');
       }
 
-      // Set user session in context with user data from our database
       setUserSession({
         isLoggedIn: true,
         userType: userType,
@@ -92,10 +84,9 @@ const LoginScreen = ({ navigation }) => {
           name: user.name,
           email: user.email,
         },
-        calculationHistory: [] // Initialize with empty history
+        calculationHistory: []
       });
 
-      // Navigate to Home screen
       navigation.replace('Home');
 
     } catch (error) {
@@ -106,7 +97,7 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
-  // Check for stored credentials on component mount
+
   React.useEffect(() => {
     const checkStoredCredentials = async () => {
       try {
@@ -139,7 +130,7 @@ const LoginScreen = ({ navigation }) => {
               style={styles.logo}
               resizeMode="contain"
             />
-            <Text style={styles.title}>CKD Risk Calculator</Text>
+            <Text style={styles.title}>Nephro Calc</Text>
             <Text style={styles.subtitle}>
               Login to access your personal calculator
             </Text>

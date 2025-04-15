@@ -1,25 +1,22 @@
 
 export const calculateEGFR = (creatinine, age, isFemale, isBlack) => {
   // eGFR = 186 x (Creat / 88.4)^-1.154 x (Age)^-0.203 x (0.742 if female) x (1.210 if black)
-  
-  // Makes sure the age is in the acceptable range
+
   if (creatinine <= 0 || age < 18 || age > 110) {
     throw new Error('Invalid input values');
   }
-  
+
   // Calculates eGFR 
   let eGFR = 186 * Math.pow(creatinine / 88.4, -1.154) * Math.pow(age, -0.203);
-  
-  // checks if femal and adds mulitplier
+
   if (isFemale) {
     eGFR *= 0.742;
   }
-  
-  //checks if black and add the multipler 
+
   if (isBlack) {
     eGFR *= 1.210;
   }
-  
+
   // categories ckd based on eGFR
   let stage;
   if (eGFR >= 90) {

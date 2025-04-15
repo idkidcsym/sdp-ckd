@@ -11,8 +11,6 @@ const HomeScreen = ({ navigation }) => {
   // Check if user is logged in
   useEffect(() => {
     if (!userSession.isLoggedIn && userSession.userType !== 'guest') {
-      // No need to redirect - we'll show the welcome screen
-      // navigation.replace('Login');
     }
   }, [userSession.isLoggedIn, navigation]);
 
@@ -27,11 +25,10 @@ const HomeScreen = ({ navigation }) => {
     });
     navigation.reset({
       index: 0,
-      routes: [{ name: 'Login' }], // This clears the navigation stack completely
+      routes: [{ name: 'Login' }],
     });
   };
 
-  // If user is logged in or is a guest, show the dashboard
   return (
     <SafeAreaView style={styles.dashboardContainer}>
       <StatusBar style="auto" />
@@ -42,7 +39,7 @@ const HomeScreen = ({ navigation }) => {
             style={styles.dashboardLogo}
             resizeMode="contain"
           />
-          <Text style={styles.title}>CKD Risk Calculator</Text>
+          <Text style={styles.title}>NephroCalc</Text>
         </View>
 
         <View style={styles.userInfoContainer}>
